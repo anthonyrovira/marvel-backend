@@ -41,7 +41,11 @@ router.post("/user/signup", async (req, res) => {
         );
 
         res.status(200).json({
-          newUserReturned,
+          _id: newUserReturned._id,
+          username: newUserReturned.username,
+          email: newUserReturned.email,
+          favorites: newUserReturned.favorites,
+          token: newUserReturned.token,
         });
       } else {
         res.status(400).json({ error: "Some element(s) missing" });
