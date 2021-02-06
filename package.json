@@ -1,0 +1,23 @@
+{
+  "name": "marvel-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cloudinary": "^1.24.0",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.0.0",
+    "dot-env": "0.0.1",
+    "express": "^4.17.1",
+    "express-formidable": "^1.2.0",
+    "mongoose": "^5.11.14",
+    "uid": "^2.0.0"
+  }
+}
