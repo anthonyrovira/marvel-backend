@@ -75,7 +75,6 @@ router.post("/user/login", async (req, res) => {
             _id: user._id,
             username: user.username,
             email: user.email,
-            favorites: user.favorites,
             token: user.token,
           });
         } else {
