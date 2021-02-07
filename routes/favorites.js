@@ -15,6 +15,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       const { _id, title, description, thumbnail } = req.fields;
       //console.log(newComic);
       let user = req.user;
+      let index = 0;
 
       const favoritesComics = [...user.favorites.comics];
       let isComicAlreadyFavorite = false;
@@ -23,12 +24,13 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
         // Si le newComic est déjà présent dans les favoris
         if (_id === user.favorites.comics[i]._id) {
           isComicAlreadyFavorite = true;
+          index = i;
           break;
         }
       }
       // Il est déjà présent dans les favoris
       if (isComicAlreadyFavorite) {
-        favoritesComics.splice(i, 1);
+        favoritesComics.splice(index, 1);
       }
       // S'il ne l'est pas, on doit l'y ajouter
       else {
