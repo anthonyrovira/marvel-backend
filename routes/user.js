@@ -93,7 +93,7 @@ router.post("/user/login", async (req, res) => {
   }
 });
 
-router.get("/user/:token", async (req, res) => {
+router.get("/user/:token", isAuthenticated, async (req, res) => {
   try {
     if (req.params.token) {
       const token = req.params.token;
