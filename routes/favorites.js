@@ -72,7 +72,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
 router.post("/favorites/characters", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
-      const { _id, name, description, thumbnail } = req.fields;
+      const { _id, name, description, thumbnail, comics } = req.fields;
 
       //console.log(newComic);
       let user = req.user;
@@ -102,6 +102,7 @@ router.post("/favorites/characters", isAuthenticated, async (req, res) => {
           name,
           description,
           thumbnail,
+          comics,
         };
 
         favoritesCharacters.push(newComic);
