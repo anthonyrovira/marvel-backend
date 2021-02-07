@@ -73,7 +73,15 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
 router.post("/favorites/characters", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
-      const { _id, name } = req.fields;
+        let _id;
+        let name;
+        if (req.fields.name) {
+             _id = req.fields._id;
+             name = req.fields.name;
+        } else {
+            _id = req.fields._id;
+        }
+      
       //console.log(newComic);
       let user = req.user;
       let index = 0;
