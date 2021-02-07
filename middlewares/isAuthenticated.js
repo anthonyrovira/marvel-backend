@@ -7,7 +7,7 @@ const isAuthenticated = async (req, res, next) => {
       const token = req.headers.authorization.replace("Bearer ", "");
       //On vérifie la présence de ce token dans la base de données
       const user = await User.findOne({ token: token }).select(
-        "email username _id"
+        "email username _id favorites"
       );
       if (user) {
         // On ajoute une clé user à l'objet req
@@ -18,7 +18,7 @@ const isAuthenticated = async (req, res, next) => {
         return res.status(400).json({ message: "Unauthorized" });
       }
     } else {
-      return res.status(400).json({ message: "Authorisation missing" });
+      return res.status(400).json({ message: "Authorization is missing" });
     }
   } catch (error) {
     console.log(error.message);
