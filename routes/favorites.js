@@ -9,7 +9,7 @@ const User = require("../models/User");
 router.post("/favorites/comics", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
-      const { _id, title } = req.fields;
+      const { _id, title, description, thumbnail } = req.fields;
       //console.log(newComic);
       let user = req.user;
       let index = 0;
@@ -36,6 +36,8 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
         const newComic = {
           _id,
           title,
+          description,
+          thumbnail,
         };
         favoritesComics.push(newComic);
         isFavorite = true;
@@ -70,14 +72,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
 router.post("/favorites/characters", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
-      let _id;
-      let name;
-      if (req.fields.name) {
-        _id = req.fields._id;
-        name = req.fields.name;
-      } else {
-        _id = req.fields._id;
-      }
+      const { _id, name, description, thumbnail } = req.fields;
 
       //console.log(newComic);
       let user = req.user;
@@ -102,17 +97,12 @@ router.post("/favorites/characters", isAuthenticated, async (req, res) => {
       }
       // S'il ne l'est pas, on doit l'y ajouter
       else {
-        let newComic = {};
-        if (req.fields.name) {
-          newComic = {
-            _id,
-            name,
-          };
-        } else {
-          newComic = {
-            _id,
-          };
-        }
+        const newComic = {
+          _id,
+          name,
+          description,
+          thumbnail,
+        };
 
         favoritesCharacters.push(newComic);
         isFavorite = true;
