@@ -73,15 +73,15 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
 router.post("/favorites/characters", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
-        let _id;
-        let name;
-        if (req.fields.name) {
-             _id = req.fields._id;
-             name = req.fields.name;
-        } else {
-            _id = req.fields._id;
-        }
-      
+      let _id;
+      let name;
+      if (req.fields.name) {
+        _id = req.fields._id;
+        name = req.fields.name;
+      } else {
+        _id = req.fields._id;
+      }
+
       //console.log(newComic);
       let user = req.user;
       let index = 0;
@@ -105,10 +105,18 @@ router.post("/favorites/characters", isAuthenticated, async (req, res) => {
       }
       // S'il ne l'est pas, on doit l'y ajouter
       else {
-        const newComic = {
-          _id,
-          name,
-        };
+        let newComic = {};
+        if (req.fields.name) {
+          newComic = {
+            _id,
+            name,
+          };
+        } else {
+          newComic = {
+            _id,
+          };
+        }
+
         favoritesCharacters.push(newComic);
         isFavorite = true;
       }
