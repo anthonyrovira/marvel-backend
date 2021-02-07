@@ -16,6 +16,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       //console.log(newComic);
       let user = req.user;
       let index = 0;
+      let isFavorite = false;
 
       const favoritesComics = [...user.favorites.comics];
       let isComicAlreadyFavorite = false;
@@ -31,6 +32,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       // Il est déjà présent dans les favoris
       if (isComicAlreadyFavorite) {
         favoritesComics.splice(index, 1);
+        isFavorite = false;
       }
       // S'il ne l'est pas, on doit l'y ajouter
       else {
@@ -41,6 +43,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
           thumbnail,
         };
         favoritesComics.push(newComic);
+        isFavorite = true;
       }
 
       user.favorites.comics = favoritesComics;
@@ -50,9 +53,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       // On enregistre dans la BDD
       await user.save();
 
-      res.status(200).json({
-        newComic,
-      });
+      res.status(200).json({ isFavorite });
       /*
 
       res.status(200).json({
