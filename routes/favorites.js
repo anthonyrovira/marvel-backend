@@ -13,49 +13,11 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
       const { newComic } = req.fields;
-      const allComics = await User.find({ favorites: { comics } });
+      const allComics = await User.find({ favorites: { comics: [] } });
       console.log(allComics);
       res.status(200).json({
         allComics,
       });
-      /*
-      if (email && username && password) {
-        // Générer un salt
-        const salt = uid2(64);
-        // Générer un hash (résultat de l'encryptage du password+salt)
-        const hash = SHA256(password + salt).toString(encBase64);
-        // Générer un token (chaîne de caractère aléatoire)
-        const token = uid2(64);
-        // Initialisation des favoris
-        const favorites = {
-          characters: [],
-          comics: [],
-        };
-
-        const newUser = new User({
-          email: email,
-          username: username,
-          favorites: favorites,
-          token: token,
-          hash: hash,
-          salt: salt,
-        });
-
-        await newUser.save();
-        const newUserReturned = await User.findOne({ token: token }).select(
-          "_id username email favorites token"
-        );
-
-        res.status(200).json({
-          _id: newUserReturned._id,
-          username: newUserReturned.username,
-          email: newUserReturned.email,
-          favorites: newUserReturned.favorites,
-          token: newUserReturned.token,
-        });
-      } else {
-        res.status(400).json({ message: "Fields are missing" });
-      }*/
     } else {
       res.status(401).json({ message: "Fields are missing" });
     }
