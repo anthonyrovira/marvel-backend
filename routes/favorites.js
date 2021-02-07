@@ -12,7 +12,7 @@ const User = require("../models/User");
 router.post("/favorites/comics", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
-      const { _id, title, description, thumbnail } = req.fields;
+      const { _id } = req.fields;
       //console.log(newComic);
       let user = req.user;
       let index = 0;
@@ -38,9 +38,6 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       else {
         const newComic = {
           _id,
-          title,
-          description,
-          thumbnail,
         };
         favoritesComics.push(newComic);
         isFavorite = true;
@@ -49,7 +46,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       user.favorites.comics = favoritesComics;
 
       user.markModified("favorites.comics");
-      console.log(user);
+      //console.log(user);
       // On enregistre dans la BDD
       await user.save();
 
