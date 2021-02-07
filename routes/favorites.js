@@ -13,7 +13,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
       const { newComic } = req.fields;
-      console.log(newComic);
+      //console.log(newComic);
       let user = req.user;
 
       const favoritesComics = [...user.favorites.comics];
@@ -42,12 +42,16 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       // On enregistre dans la BDD
       await user.save();
 
+      res.status(200).json(newComic);
+      /*
+
       res.status(200).json({
         _id: user._id,
         username: user.username,
         email: user.email,
         favorites: user.favorites,
       });
+      */
     } else {
       res.status(401).json({ message: "Fields are missing" });
     }
