@@ -13,10 +13,39 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
       const { newComic } = req.fields;
-      const allComics = await User.find({ favorites: { comics: [] } });
-      console.log(allComics);
+      let user = req.user;
+
+      const favoritesComics = [...user.favorites.comics];
+      let isComicAlreadyFavorite = false;
+
+      for (let i = 0; i < favoritesComics.length; i++) {
+        // Si le newComic est déjà présent dans les favoris
+        if (newComic._id === user.favorites.comics[i]._id) {
+          isComicAlreadyFavorite = true;
+          break;
+        }
+      }
+      // Il est déjà présent dans les favoris
+      if (isComicAlreadyFavorite) {
+        favoritesComics.splice(i, 1);
+      }
+      // S'il ne l'est pas, on doit l'y ajouter
+      else {
+        favoritesComics.push(newComic);
+      }
+
+      user.favorites.comics = favoritesComics;
+
+      user.markModified("favorites.comics");
+      console.log(user);
+      // On enregistre dans la BDD
+      await user.save();
+
       res.status(200).json({
-        allComics,
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        favorites: user.favorites,
       });
     } else {
       res.status(401).json({ message: "Fields are missing" });
