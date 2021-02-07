@@ -13,6 +13,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
       const { newComic } = req.fields;
+      console.log(newComic);
       let user = req.user;
 
       const favoritesComics = [...user.favorites.comics];
