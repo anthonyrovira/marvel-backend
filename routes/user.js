@@ -99,7 +99,7 @@ router.get("/user/:token", isAuthenticated, async (req, res) => {
     if (req.params.token) {
       const token = req.params.token;
       const user = await User.findOne({ token: token }).select(
-        "email _id username favorites token"
+        "email _id username favorites"
       );
       if (user) {
         console.log("authorized token");
