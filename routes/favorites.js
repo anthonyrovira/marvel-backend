@@ -42,7 +42,9 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       // On enregistre dans la BDD
       await user.save();
 
-      res.status(200).send(newComic);
+      res.status(200).json({
+        newComic,
+      });
       /*
 
       res.status(200).json({
