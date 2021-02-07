@@ -15,7 +15,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       const allComics = await User.find({ favorites: { comics } });
       console.log(allComics);
       res.status(200).json({
-        message: "ok",
+        allComics,
       });
       /*
       if (email && username && password) {
