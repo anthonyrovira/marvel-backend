@@ -63,7 +63,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
+/*
 router.post("/favorites/character", isAuthenticated, async (req, res) => {
   try {
     const { email, password } = req.fields;
@@ -138,5 +138,5 @@ router.delete("/favorites", isAuthenticated, async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
+*/
 module.exports = router;

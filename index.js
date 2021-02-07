@@ -18,6 +18,8 @@ mongoose.connect(process.env.MONGODB_URI, {
 /* ROUTES */
 const userRoutes = require("./routes/user");
 app.use(userRoutes);
+const favoritesRoutes = require("./routes/favorites");
+app.use(favoritesRoutes);
 
 app.all("*", (req, res) => {
   console.log("Route is not defined");
