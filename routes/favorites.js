@@ -12,7 +12,7 @@ const User = require("../models/User");
 router.post("/favorites/comics", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
-      const { _id } = req.fields;
+      const { _id, title } = req.fields;
       //console.log(newComic);
       let user = req.user;
       let index = 0;
@@ -38,6 +38,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       else {
         const newComic = {
           _id,
+          title,
         };
         favoritesComics.push(newComic);
         isFavorite = true;
@@ -68,35 +69,60 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-/*
-router.post("/favorites/character", isAuthenticated, async (req, res) => {
-  try {
-    const { email, password } = req.fields;
-    if (email && password) {
-      const user = await User.findOne({ email: email });
 
-      if (user) {
-        const userHash = user.hash;
-        const userSalt = user.salt;
-        const hashToCompare = SHA256(password + userSalt).toString(encBase64);
-        if (userHash === hashToCompare) {
-          console.log("authentification succeed");
-          res.status(200).json({
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            favorites: user.favorites,
-            token: user.token,
-          });
-        } else {
-          console.log("unauthorized");
-          res.status(400).json({ message: "unauthorized" });
+router.post("/favorites/characters", isAuthenticated, async (req, res) => {
+  try {
+    if (req.fields) {
+      const { _id, name } = req.fields;
+      //console.log(newComic);
+      let user = req.user;
+      let index = 0;
+      let isFavorite = false;
+
+      const favoritesCharacters = [...user.favorites.characters];
+      let isCharacterAlreadyFavorite = false;
+
+      for (let i = 0; i < favoritesCharacters.length; i++) {
+        // Si le newCharacter est déjà présent dans les favoris
+        if (_id === user.favorites.characters[i]._id) {
+          isCharacterAlreadyFavorite = true;
+          index = i;
+          break;
         }
-      } else {
-        res.status(400).json({ message: "user not found" });
       }
+      // Il est déjà présent dans les favoris
+      if (isCharacterAlreadyFavorite) {
+        favoritesCharacters.splice(index, 1);
+        isFavorite = false;
+      }
+      // S'il ne l'est pas, on doit l'y ajouter
+      else {
+        const newComic = {
+          _id,
+          name,
+        };
+        favoritesCharacters.push(newComic);
+        isFavorite = true;
+      }
+
+      user.favorites.characters = favoritesCharacters;
+
+      user.markModified("favorites.characters");
+      //console.log(user);
+      // On enregistre dans la BDD
+      await user.save();
+
+      res.status(200).json({ isFavorite });
+      /*
+        res.status(200).json({
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          favorites: user.favorites,
+        });
+        */
     } else {
-      res.status(400).json({ error: "Missing parameters" });
+      res.status(401).json({ message: "Fields are missing" });
     }
   } catch (error) {
     console.log(error.message);
@@ -106,18 +132,11 @@ router.post("/favorites/character", isAuthenticated, async (req, res) => {
 
 router.get("/favorites", isAuthenticated, async (req, res) => {
   try {
-    if (req.params.token) {
-      const token = req.params.token;
-      const user = await User.findOne({ token: token }).select(
-        "email _id username favorites token"
-      );
-      if (user) {
-        console.log("authorized token");
-        res.status(200).json({ user });
-      }
-    } else {
-      res.status(400).json({ message: "token is missing" });
-    }
+    let user = req.user;
+
+    comics = user.favorites.comics;
+    characters = user.favorites.characters;
+    res.status(200).json({ comics, characters });
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ message: error.message });
@@ -126,22 +145,34 @@ router.get("/favorites", isAuthenticated, async (req, res) => {
 
 router.delete("/favorites", isAuthenticated, async (req, res) => {
   try {
-    if (req.params.token) {
-      const token = req.params.token;
-      const user = await User.findOne({ token: token }).select(
-        "email _id username favorites token"
-      );
-      if (user) {
-        console.log("authorized token");
-        res.status(200).json({ user });
-      }
+    const emptyFavorites = {
+      characters: [],
+      comics: [],
+    };
+
+    let user = req.user;
+    user.favorites = emptyFavorites;
+    user.markModified("favorites");
+
+    await user.save();
+
+    const userReturned = await User.findOne({ email: user.email }).select(
+      "favorites"
+    );
+
+    if (userReturned.favorites.length === 0) {
+      res.status(200).json({
+        message: "database is now empty",
+      });
     } else {
-      res.status(400).json({ message: "token is missing" });
+      res.status(400).json({
+        message: "bad request, something went wrong with database",
+      });
     }
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ message: error.message });
   }
 });
-*/
+
 module.exports = router;
