@@ -14,6 +14,9 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       const { newComic } = req.fields;
       const allComics = await User.find({ favorites: { comics } });
       console.log(allComics);
+      res.status(200).json({
+        message: "ok",
+      });
       /*
       if (email && username && password) {
         // Générer un salt
