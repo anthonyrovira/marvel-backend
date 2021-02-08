@@ -49,10 +49,10 @@ router.post("/user/signup", async (req, res) => {
           token: newUserReturned.token,
         });
       } else {
-        res.status(400).json({ error: "Some element(s) missing" });
+        res.status(400).json({ message: "Some element(s) missing" });
       }
     } else {
-      res.status(401).json({ error: "user already exist" });
+      res.status(409).json({ message: "User already exists" });
     }
   } catch (error) {
     console.log(error.message);
@@ -80,13 +80,13 @@ router.post("/user/login", async (req, res) => {
           });
         } else {
           console.log("unauthorized");
-          res.status(400).json({ message: "unauthorized" });
+          res.status(401).json({ message: "Wrong email or password" });
         }
       } else {
-        res.status(400).json({ message: "user not found" });
+        res.status(404).json({ message: "This email doesn't have an account" });
       }
     } else {
-      res.status(400).json({ error: "Missing parameters" });
+      res.status(400).json({ message: "Missing parameters" });
     }
   } catch (error) {
     console.log(error.message);
