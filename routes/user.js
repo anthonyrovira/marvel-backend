@@ -49,14 +49,14 @@ router.post("/user/signup", async (req, res) => {
           token: newUserReturned.token,
         });
       } else {
-        res.status(400).json({ message: "Some element(s) missing" });
+        res.status(400).json({ error: { message: "Some element(s) missing" } });
       }
     } else {
-      res.status(409).json({ message: "User already exists" });
+      res.status(409).json({ error: { message: "User already exists" } });
     }
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ error: { message: error.message } });
   }
 });
 
@@ -80,17 +80,21 @@ router.post("/user/login", async (req, res) => {
           });
         } else {
           console.log("unauthorized");
-          res.status(401).json({ message: "Wrong email or password" });
+          res
+            .status(401)
+            .json({ error: { message: "Wrong email or password" } });
         }
       } else {
-        res.status(404).json({ message: "This email doesn't have an account" });
+        res
+          .status(404)
+          .json({ error: { message: "This email doesn't have an account" } });
       }
     } else {
-      res.status(400).json({ message: "Missing parameters" });
+      res.status(400).json({ error: { message: "Missing parameters" } });
     }
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ error: { message: error.message } });
   }
 });
 
