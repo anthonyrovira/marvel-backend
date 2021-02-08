@@ -87,7 +87,6 @@ router.post("/user/login", async (req, res) => {
       } else {
         res
           .status(404)
-          .send("This email doesn't have an account")
           .json({ error: { message: "This email doesn't have an account" } });
       }
     } else {
@@ -95,7 +94,7 @@ router.post("/user/login", async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({ error: { message: error.message } });
+    res.status(400).json({ error: { message: "ok error" } });
   }
 });
 
