@@ -94,7 +94,7 @@ router.post("/user/login", async (req, res) => {
     }
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({ error: { message: "ok error" } });
+    res.status(400).json({ error: { message: error.message } });
   }
 });
 
