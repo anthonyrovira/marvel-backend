@@ -25,6 +25,8 @@ const userRoutes = require("./routes/user");
 app.use(userRoutes);
 const favoritesRoutes = require("./routes/favorites");
 app.use(favoritesRoutes);
+const charactersRoute = require("./routes/characters");
+app.use(charactersRoute);
 
 app.all("*", (req, res) => {
   console.log("Route is not defined");
