@@ -23,9 +23,7 @@ router.get("/characters", async (req, res) => {
     const queryParams = qs.stringify(params);
 
     await axios
-      .get(
-        `${process.env.REACT_APP_REACTEUR_BACKEND_URL}/characters?${queryParams}`
-      )
+      .get(`${process.env.URL_BACKEND_LEREACTEUR}/characters?${queryParams}`)
       .then((response) => {
         res.status(200).json(response.data);
       })
