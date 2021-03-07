@@ -10,13 +10,13 @@ router.get("/characters", async (req, res) => {
     if (req.query.name) {
       params = {
         apiKey: process.env.API_KEY,
-        name: debouncedSearch,
+        name: req.query.name,
       };
     } else if (req.query.limit || req.query.skip) {
       params = {
         apiKey: process.env.API_KEY,
-        limit: limit,
-        skip: skip,
+        limit: req.query.limit,
+        skip: req.query.skip,
       };
     }
 
