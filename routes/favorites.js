@@ -10,8 +10,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
   try {
     if (req.fields) {
       const { _id, title, description, thumbnail } = req.fields;
-      //console.log(newComic);
-      let user = req.user;
+      const { user } = req;
       let index = 0;
       let isFavorite = false;
 
@@ -39,6 +38,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
           description,
           thumbnail,
         };
+
         favoritesComics.push(newComic);
         isFavorite = true;
       }
@@ -46,7 +46,7 @@ router.post("/favorites/comics", isAuthenticated, async (req, res) => {
       user.favorites.comics = favoritesComics;
 
       user.markModified("favorites.comics");
-      //console.log(user);
+      console.log(user);
       // On enregistre dans la BDD
       await user.save();
 
@@ -74,7 +74,6 @@ router.post("/favorites/characters", isAuthenticated, async (req, res) => {
     if (req.fields) {
       const { _id, name, description, thumbnail, comics } = req.fields;
 
-      //console.log(newComic);
       let user = req.user;
       let index = 0;
       let isFavorite = false;
@@ -97,7 +96,7 @@ router.post("/favorites/characters", isAuthenticated, async (req, res) => {
       }
       // S'il ne l'est pas, on doit l'y ajouter
       else {
-        const newComic = {
+        const newCharacter = {
           _id,
           name,
           description,
@@ -105,14 +104,14 @@ router.post("/favorites/characters", isAuthenticated, async (req, res) => {
           comics,
         };
 
-        favoritesCharacters.push(newComic);
+        favoritesCharacters.push(newCharacter);
         isFavorite = true;
       }
 
       user.favorites.characters = favoritesCharacters;
 
       user.markModified("favorites.characters");
-      //console.log(user);
+      console.log(user);
       // On enregistre dans la BDD
       await user.save();
 
@@ -136,7 +135,7 @@ router.post("/favorites/characters", isAuthenticated, async (req, res) => {
 
 router.get("/favorites", isAuthenticated, async (req, res) => {
   try {
-    let user = req.user;
+    const user = req.user;
 
     comics = user.favorites.comics;
     characters = user.favorites.characters;

@@ -5,21 +5,27 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node --env-file .env index.js",
+    "dev": "nodemon --env-file .env index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.7.3",
     "cors": "^2.8.5",
-    "crypto-js": "^4.0.0",
-    "dot-env": "0.0.1",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "crypto-js": "^4.2.0",
+    "express": "^4.19.2",
     "express-formidable": "^1.2.0",
-    "mongoose": "^5.11.14",
-    "qs": "^6.7.0",
-    "uid2": "0.0.3"
+    "mongoose": "^8.5.2",
+    "qs": "^6.13.0",
+    "uid2": "1.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/formidable": "^3.4.5",
+    "@types/node": "^22.1.0",
+    "typescript": "^5.5.4"
   }
 }
