@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api-reacteur/(.*)",
+      "destination": "https://lereacteur-marvel-api.herokuapp.com/$1"
+    }
+  ]
+}
