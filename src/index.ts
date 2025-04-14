@@ -6,13 +6,34 @@ import * as dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes";
 import favoritesRoutes from "./routes/favoritesRoutes";
 
+const allowedOrigins = [
+  process.env.URL_FRONTEND_VITE, // Frontend production
+  "http://localhost:5173", // Frontend development
+];
+
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (!allowedOrigins.includes(origin)) {
+        console.error(`CORS error: Origin ${origin} not allowed.`);
+        const msg = "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 
 mongoose.connect(process.env.MONGODB_URI as string, {
   autoIndex: true,
