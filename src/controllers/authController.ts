@@ -40,23 +40,43 @@ export const signIn = async (req: Request<{}, {}, SignInBody>, res: Response) =>
   try {
     const { email, username, password } = req.body;
 
-    if (!password || (!email && !username)) {
-      res.status(400).json({ message: "Missing credentials" });
+    if (!password) {
+      res.status(400).json({ message: "Password is required" });
       return;
     }
 
-    const user = await User.findOne(email ? { email } : { username });
-    if (!user || !user.validatePassword(password)) {
+    if (!email && !username) {
+      res.status(400).json({ message: "Email or username is required" });
+      return;
+    }
+
+    const query = email ? { email } : { username };
+    const user = await User.findOne(query);
+
+    if (!user) {
+      res.status(401).json({ message: "Invalid credentials" });
+      return;
+    }
+
+    const isValidPassword = user.validatePassword(password);
+    if (!isValidPassword) {
       res.status(401).json({ message: "Invalid credentials" });
       return;
     }
 
     const token = user.generateJWT();
-    res.json({ token });
+    res.json({
+      token,
+      user: {
+        email: user.email,
+        username: user.username,
+        favorites: user.favorites,
+      },
+    });
     return;
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("SignIn error:", error);
+    res.status(500).json({ message: "Internal server error" });
     return;
   }
 };

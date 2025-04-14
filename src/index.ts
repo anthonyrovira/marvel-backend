@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
+import bodyParser from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import * as dotenv from "dotenv";
@@ -8,6 +9,9 @@ import favoritesRoutes from "./routes/favoritesRoutes";
 dotenv.config();
 
 const app = express();
+
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 mongoose.connect(process.env.MONGODB_URI as string, {

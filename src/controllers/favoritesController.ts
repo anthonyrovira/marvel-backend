@@ -18,6 +18,7 @@ export const toggleCharacterFavorite = async (
     const userId = req.user?._id;
 
     if (!character || !userId) {
+      console.error("Invalid request body:", req.body);
       res.status(400).json({ message: "Invalid request" });
       return;
     }
@@ -25,6 +26,7 @@ export const toggleCharacterFavorite = async (
     // Get user
     const user = await User.findById(userId);
     if (!user) {
+      console.error("User not found:", userId);
       res.status(404).json({ message: "User not found" });
       return;
     }
